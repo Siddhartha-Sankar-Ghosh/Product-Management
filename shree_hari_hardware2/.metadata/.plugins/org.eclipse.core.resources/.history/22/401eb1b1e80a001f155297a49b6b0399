@@ -1,0 +1,967 @@
+package src.shree_hari_hardware2;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+import net.proteanit.sql.DbUtils;
+
+public class Record {
+
+	JFrame frame;
+	private JTextField textdate;
+	private JTextField textaddress;
+	private JTextField textproducts;
+	private JTextField textac;
+	private JTextField textquantity;
+	private JTextField textsq;
+	private JTextField textcost;
+	private JTextField textsearch;
+	private JTable table;
+
+	private JFrame frame1s;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					record1 window = new record1();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Record() {
+		initialize();
+		Connect();
+		table_load1();
+		table_load();
+		
+	}
+	
+	private JTextField text_sdate;
+	private JTextField text_price;
+	private JTable table_1;
+	private JTextField p_name;
+	private JTable table_2;
+	private JTextField st;
+	private JTextField t_s_amu;
+	
+	
+	
+	
+	Connection con;
+	PreparedStatement pst;
+	ResultSet rs;
+	
+	
+	public  void  Connect() {
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shree","root","Sidu@1234");
+			
+			if(!con.isClosed()) {
+				System.out.println("Successfully connected in the mysql server...");
+			}
+		}
+		catch(ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void table_load() {
+		try {
+			pst = con.prepareStatement("select * from store_record");
+			rs = pst.executeQuery();
+			table.setModel(DbUtils.resultSetToTableModel(rs));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	public void table_load1() {
+		try {
+			pst = con.prepareStatement("select * from sells_record");
+			rs = pst.executeQuery();
+			
+		}
+		catch(Exception ei) {
+			ei.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 8));
+		frame.getContentPane().setBackground(Color.CYAN);
+		frame.setBounds(100, 100, 1500, 500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Wealcome to  Shree Hari Hardware");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel.setBounds(544, 11, 259, 25);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 224));
+		panel.setBorder(new TitledBorder(null, "Record", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(10, 35, 1503, 398);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("Date");
+		lblNewLabel_1.setForeground(new Color(255, 0, 255));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNewLabel_1.setBounds(53, 32, 56, 26);
+		panel.add(lblNewLabel_1);
+		
+		textdate = new JTextField();
+		textdate.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				
+				
+				try {
+					Calendar n = Calendar.getInstance();
+					int a = (n.get(Calendar.DATE));
+					int b =(n.get(Calendar.MONTH));
+					int c = (n.get(Calendar.YEAR));
+					
+					int b1 = b+1;
+					
+					
+					String str_a = String.valueOf(a);
+					String str_b = String.valueOf(b1);
+					String str_c = String.valueOf(c);
+					textdate.setText(str_a+":"+str_b+":"+str_c);
+					
+					
+				}
+				catch(Exception ei) {
+					ei.printStackTrace();
+				}
+			}
+		});
+		textdate.setBackground(Color.GREEN);
+		textdate.setForeground(Color.BLUE);
+		textdate.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textdate.setBounds(148, 29, 236, 34);
+		panel.add(textdate);
+		textdate.setColumns(10);
+		
+		JLabel txtadd = new JLabel("Address");
+		txtadd.setForeground(new Color(255, 0, 255));
+		txtadd.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtadd.setBounds(516, 33, 89, 24);
+		panel.add(txtadd);
+		
+		JLabel txtproducts = new JLabel("Products");
+		txtproducts.setForeground(new Color(255, 0, 255));
+		txtproducts.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtproducts.setBounds(1108, 32, 86, 26);
+		panel.add(txtproducts);
+		
+		JLabel txtap = new JLabel("Actual Price");
+		txtap.setForeground(new Color(255, 0, 255));
+		txtap.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtap.setBounds(491, 97, 114, 19);
+		panel.add(txtap);
+		
+		JLabel txtcost = new JLabel("Cost");
+		txtcost.setForeground(new Color(255, 0, 255));
+		txtcost.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtcost.setBounds(1138, 105, 56, 22);
+		panel.add(txtcost);
+		
+		JLabel txtq = new JLabel("Quantity");
+		txtq.setForeground(new Color(255, 0, 255));
+		txtq.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtq.setBounds(35, 93, 86, 26);
+		panel.add(txtq);
+		
+		JLabel txtsq = new JLabel("Sells Quantity");
+		txtsq.setLabelFor(frame);
+		txtsq.setBackground(Color.GREEN);
+		txtsq.setForeground(Color.RED);
+		txtsq.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtsq.setBounds(17, 157, 121, 26);
+		panel.add(txtsq);
+		
+		textaddress = new JTextField();
+		textaddress.setForeground(Color.BLUE);
+		textaddress.setBackground(Color.GREEN);
+		textaddress.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textaddress.setColumns(10);
+		textaddress.setBounds(642, 26, 418, 39);
+		panel.add(textaddress);
+		
+		textproducts = new JTextField();
+		textproducts.setForeground(Color.BLUE);
+		textproducts.setBackground(Color.GREEN);
+		textproducts.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textproducts.setColumns(10);
+		textproducts.setBounds(1204, 24, 265, 39);
+		panel.add(textproducts);
+		
+		textac = new JTextField();
+		textac.setForeground(Color.BLUE);
+		textac.setBackground(Color.GREEN);
+		textac.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textac.setColumns(10);
+		textac.setBounds(642, 85, 418, 34);
+		panel.add(textac);
+		
+		textquantity = new JTextField();
+		textquantity.setForeground(Color.BLUE);
+		textquantity.setBackground(Color.GREEN);
+		textquantity.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textquantity.setColumns(10);
+		textquantity.setBounds(148, 93, 236, 34);
+		panel.add(textquantity);
+		
+		textsq = new JTextField();
+		textsq.setForeground(Color.BLACK);
+		textsq.setBackground(Color.RED);
+		textsq.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textsq.setColumns(10);
+		textsq.setBounds(148, 149, 236, 34);
+		panel.add(textsq);
+		
+		textcost = new JTextField();
+		textcost.setForeground(Color.BLUE);
+		textcost.setBackground(Color.GREEN);
+		textcost.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textcost.setColumns(10);
+		textcost.setBounds(1204, 93, 258, 34);
+		panel.add(textcost);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Search", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setBounds(842, 257, 390, 100);
+		panel.add(panel_1);
+		panel_1.setLayout(null);
+		
+		textsearch = new JTextField();
+		textsearch.setForeground(new Color(0, 0, 255));
+		textsearch.setBackground(new Color(0, 255, 0));
+		textsearch.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				try {
+					String id = textsearch.getText();
+					pst = con.prepareStatement("select Date,Address,products,Actual_price,Cost,Sells_Amount,Available_quantity from store_record where id=?");
+					pst.setString(1, id);
+					ResultSet rs = pst.executeQuery();
+					
+					if(rs.next()==true) {
+						String Date = rs.getString(1);
+						String Address = rs.getString(2);
+						String products = rs.getString(3);
+						String Actual_price = rs.getString(4);
+						String Cost = rs.getString(5);
+						String Sells_Amount = rs.getString(6);
+						String Quantity = rs.getString(7);
+						
+						
+						textdate.setText(Date);
+						textaddress.setText(Address);
+						textproducts.setText(products);
+						textac.setText(Actual_price);
+						textcost.setText(Cost);
+						textsq.setText(Sells_Amount);
+						textquantity.setText(Quantity);
+						
+					}
+						
+					else {
+						textdate.setText("");
+						textaddress.setText("");
+						textproducts.setText("");
+						textac.setText("");
+						textcost.setText("");
+						textsq.setText("");
+						textquantity.setText("");
+						
+						}
+						
+					}
+
+				catch(SQLException ei) {
+					ei.printStackTrace();
+				}
+				
+				
+			}
+		});
+		textsearch.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textsearch.setBounds(132, 25, 225, 44);
+		panel_1.add(textsearch);
+		textsearch.setColumns(10);
+		
+		JLabel txtproducts_1 = new JLabel("Products");
+		txtproducts_1.setForeground(new Color(75, 0, 130));
+		txtproducts_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+		txtproducts_1.setBounds(31, 35, 89, 26);
+		panel_1.add(txtproducts_1);
+		
+		JButton btnNewButton = new JButton("Save");
+		btnNewButton.setForeground(new Color(0, 0, 255));
+		btnNewButton.setBackground(new Color(255, 140, 0));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String date,address,products,actual_price,cost,total_price,quantity,sells_quantity,total_cost;
+				float total_price_f,quantity_f,total_cost_f;
+				
+				date = textdate.getText();
+				address = textaddress.getText();
+				products = textproducts.getText();
+				actual_price = textac.getText();
+				cost = textcost.getText();
+				total_price_f = (Float.parseFloat(actual_price)) + (Float.parseFloat(cost));
+				total_price = String.valueOf(total_price_f);
+				
+				quantity = textquantity.getText();
+				sells_quantity = textsq.getText();
+				quantity_f= (Float.parseFloat(quantity)) - (Float.parseFloat(sells_quantity)) ;
+				quantity = String.valueOf(quantity_f);
+				total_cost_f = total_price_f*quantity_f;
+				total_cost = String.valueOf(total_cost_f);
+				
+				
+				try {
+					pst = con.prepareStatement("insert into store_record(Date,Address,products,Actual_price,Cost,Total_Price,Sells_Amount,Available_quantity,total_cost)values(?,?,?,?,?,?,?,?,?)");
+					pst.setString(1, date);
+					pst.setString(2, address);
+					pst.setString(3, products);
+					pst.setString(4, actual_price);
+					pst.setString(5, cost);
+					pst.setString(6, total_price);
+					pst.setString(7, sells_quantity);
+					pst.setString(8, quantity );
+					pst.setString(9, total_cost);
+
+					pst.executeUpdate();
+					JOptionPane.showMessageDialog(null, "Record Saved!!!!!!");
+					table_load();
+					textdate.setText("");
+					textaddress.setText("");
+					textproducts.setText("");
+					textac.setText("");
+					textcost.setText("");
+					textsq.setText("");
+					textquantity.setText("");
+					
+					
+					textdate.requestFocus();
+				}
+				catch (SQLException ei) {
+					ei.printStackTrace();
+				}
+				
+			}
+		});
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnNewButton.setBounds(17, 286, 89, 52);
+		panel.add(btnNewButton);
+		
+		JButton btnSave = new JButton("Update");
+		btnSave.setForeground(new Color(128, 0, 0));
+		btnSave.setBackground(new Color(255, 140, 0));
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String date,address,products,actual_price,cost,total_price,quantity,sells_quantity,available_quantity,total_cost,bid,stock_amount;
+				float total_price_f,quantity_f,total_cost_f;
+				
+				date = textdate.getText();
+				address = textaddress.getText();
+				products = textproducts.getText();
+				actual_price = textac.getText();
+				cost = textcost.getText();
+				total_price_f = (Float.parseFloat(actual_price)) + (Float.parseFloat(cost));
+				total_price = String.valueOf(total_price_f);
+				
+				quantity = textquantity.getText();
+				sells_quantity = textsq.getText();
+				quantity_f= (Float.parseFloat(quantity)) - (Float.parseFloat(sells_quantity)) ;
+				quantity = String.valueOf(quantity_f);
+				
+				total_cost_f = total_price_f*quantity_f;
+				total_cost = String.valueOf(total_cost_f);
+				
+				bid = textsearch.getText();
+				
+				
+			
+				
+				
+				
+				
+				
+				try {
+					
+					pst = con.prepareStatement("update store_record set Date=?,Address=?,products=?,Actual_price=?,Cost=?,Total_Price=?,Sells_Amount=?,Available_quantity=?,total_cost=? where id=?");
+					pst.setString(1, date);
+					pst.setString(2, address);
+					pst.setString(3, products);
+					pst.setString(4, actual_price);
+					pst.setString(5, cost);
+					pst.setString(6, total_price);
+					pst.setString(7, sells_quantity);
+					pst.setString(8, quantity);
+					pst.setString(9, total_cost);
+					pst.setString(10, bid);
+					
+					
+					
+					
+					pst.executeUpdate();
+					JOptionPane.showMessageDialog(null, "Record Update!!!!!!");
+					table_load();
+					
+					
+					textdate.setText("");
+					textaddress.setText("");
+					textproducts.setText("");
+					textac.setText("");
+					textcost.setText("");
+					textsq.setText("");
+					textquantity.setText("");
+					
+					
+					textdate.requestFocus();
+				}
+				catch (SQLException ei) {
+					JOptionPane.showMessageDialog(null, "Please select any id......");
+				}
+				
+			}
+				
+		});
+		btnSave.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnSave.setBounds(116, 286, 89, 52);
+		panel.add(btnSave);
+		
+		JButton btnDelete = new JButton("Exit");
+		btnDelete.setBackground(new Color(255, 140, 0));
+		btnDelete.setForeground(new Color(0, 0, 0));
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnDelete.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnDelete.setBounds(215, 286, 89, 52);
+		panel.add(btnDelete);
+		
+		final JPanel panel_2 = new JPanel();
+		panel_2.setBounds(1523, 62, 200, 329);
+		frame.getContentPane().add(panel_2);
+		panel_2.setLayout(null);
+		
+		table_1 = new JTable();
+		table_1.setBounds(10, 149, 167, 124);
+		panel_2.add(table_1);
+		table_1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Product", "Unit", "Price", "Total Price"
+			}
+		));
+		
+		final JTextArea textreceipt = new JTextArea();
+		textreceipt.setForeground(new Color(0, 0, 0));
+		textreceipt.setFont(new Font("Monospaced", Font.BOLD, 8));
+		textreceipt.setBounds(10, 52, 183, 94);
+		panel_2.add(textreceipt);
+		
+		JLabel lblNewLabel_2 = new JLabel("Total amount");
+		lblNewLabel_2.setBounds(53, 284, 68, 19);
+		panel_2.add(lblNewLabel_2);
+		
+		final JTextArea s_total = new JTextArea();
+		s_total.setBounds(131, 284, 45, 19);
+		panel_2.add(s_total);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("THANKS");
+		lblNewLabel_2_1.setForeground(new Color(0, 0, 0));
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_2_1.setBounds(63, 310, 57, 19);
+		panel_2.add(lblNewLabel_2_1);
+		
+		JButton btnReceiptAndUpdate = new JButton("Receipt and Update");
+		btnReceiptAndUpdate.addMouseListener(new MouseAdapter() {
+			
+		});
+		btnReceiptAndUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				text receipt name and date
+				
+				
+				
+				DefaultTableModel model = (DefaultTableModel) table_1.getModel();
+				
+				String sells_q = textsq.getText();
+				String S_price = text_price.getText();
+				
+				float total_amount = Float.parseFloat(sells_q) * Float.parseFloat(S_price);
+				String total_amount_obj = String.valueOf(total_amount);
+				
+				model.addRow(new Object[] {
+						textproducts.getText(),
+						textsq.getText(),
+						text_price.getText(),
+						total_amount_obj,
+						
+				});
+				
+				float sum =0;
+				for(int i=0;i<table_1.getRowCount();i++) {
+					String total_p = (String) table_1.getValueAt(i, 3);
+					float total_p_f = Float.parseFloat(total_p);
+					
+					sum = sum+total_p_f;
+				}
+				s_total.setText(String.valueOf(sum));
+				
+//		
+				
+				String date,address,products,actual_price,cost,total_price,quantity,sells_quantity,available_quantity,total_cost,bid;
+				float total_price_f,quantity_f,total_cost_f;
+				
+				date = textdate.getText();
+				address = textaddress.getText();
+				products = textproducts.getText();
+				actual_price = textac.getText();
+				cost = textcost.getText();
+				total_price_f = (Float.parseFloat(actual_price)) + (Float.parseFloat(cost));
+				total_price = String.valueOf(total_price_f);
+				
+				quantity = textquantity.getText();
+				sells_quantity = textsq.getText();
+				quantity_f= (Float.parseFloat(quantity)) - (Float.parseFloat(sells_quantity)) ;
+				quantity = String.valueOf(quantity_f);
+				
+				total_cost_f = total_price_f*quantity_f;
+				total_cost = String.valueOf(total_cost_f);
+				
+				bid = textsearch.getText();
+				
+				
+				
+//				Save data in the sells record
+				String s_date = text_sdate.getText();
+				String cust_name = p_name.getText();
+				String s_quantity = textsq.getText();
+				String s_price = text_price.getText();
+				String profit =  String.valueOf((Float.parseFloat(s_price))-total_price_f);
+				
+				
+				
+				
+				try {
+					pst = con.prepareStatement("update store_record set Date=?,Address=?,products=?,Actual_price=?,Cost=?,Total_Price=?,Sells_Amount=?,Available_quantity=?,total_cost=? where id=?");
+					pst.setString(1, date);
+					pst.setString(2, address);
+					pst.setString(3, products);
+					pst.setString(4, actual_price);
+					pst.setString(5, cost);
+					pst.setString(6, total_price);
+					pst.setString(7, sells_quantity);
+					pst.setString(8, quantity);
+					pst.setString(9, total_cost);
+					pst.setString(10, bid);
+					
+					pst.executeUpdate();
+					JOptionPane.showMessageDialog(null, "Record Update!!!!!!");
+					table_load();
+					textdate.setText("");
+					textaddress.setText("");
+					textproducts.setText("");
+					textac.setText("");
+					textcost.setText("");
+					textsq.setText("");
+					textquantity.setText("");
+					
+					
+					textdate.requestFocus();
+					
+					
+					pst = con.prepareStatement("insert into sells_record(Date,custmer_name,product_name,sells_quantity,sells_price,Actual_price,profit)values(?,?,?,?,?,?,?)");
+					pst.setString(1, s_date);
+					pst.setString(2, cust_name);
+					pst.setString(3, products);
+					pst.setString(4, s_quantity);
+					pst.setString(5, s_price);
+					pst.setString(6, total_price);
+					pst.setString(7, profit);
+					pst.executeUpdate();
+					table_load1();
+					
+					
+					
+					
+					
+					
+				}
+				catch (SQLException ei) {
+					JOptionPane.showMessageDialog(null, "Select any id.......");
+				}
+				
+			}
+				
+		});
+		btnReceiptAndUpdate.setForeground(new Color(128, 0, 0));
+		btnReceiptAndUpdate.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnReceiptAndUpdate.setBackground(new Color(255, 140, 0));
+		btnReceiptAndUpdate.setBounds(314, 286, 229, 52);
+		panel.add(btnReceiptAndUpdate);
+		
+		
+		
+		JButton btnPrint = new JButton("Print");
+		btnPrint.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				
+				textreceipt.append(
+						"\t Shree Hari Hardware"+"\n"+
+						"\t Mobile No- 7098054823/9732654737"+"\n"+
+						"Date:  " +text_sdate.getText()+"\n"+
+						"Customer Name:   "+p_name.getText()+"\n\n\n\n"+
+						
+						"product\t"+"Unit  "+""+"  Price "+"  "+" Total Price"+"\n"+
+						"----------------------------------------------------------"
+						
+						
+						);
+				PrinterJob job = PrinterJob.getPrinterJob();
+				job.setJobName("print data");
+				job.setPrintable(new Printable() {
+
+					public int print(Graphics pg, PageFormat pf, int PageNum) throws PrinterException {
+						// TODO Auto-generated method stub
+						pf.setOrientation(PageFormat.LANDSCAPE);
+						if(PageNum>0) {
+							return Printable.NO_SUCH_PAGE;
+						}
+						Graphics2D g2 = (Graphics2D)pg;
+						g2.translate(pf.getImageableX(), pf.getImageableY());
+						g2.scale(0.85, 0.70);
+						
+						panel_2.print(g2);
+						
+						return Printable.PAGE_EXISTS;
+					}
+					
+					
+				});
+				
+				boolean ok = job.printDialog();
+				if(ok) {
+					try {
+						job.print();
+					}
+					catch(PrinterException ex){
+						ex.printStackTrace();
+					}
+				}
+				
+				textreceipt.setText(null);
+				s_total.setText(String.valueOf(0));
+				
+			}
+		});
+		btnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+
+			}
+		});
+		btnPrint.setForeground(new Color(128, 0, 0));
+		btnPrint.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnPrint.setBackground(new Color(255, 140, 0));
+		btnPrint.setBounds(556, 286, 89, 52);
+		panel.add(btnPrint);
+		
+		text_sdate = new JTextField();
+		text_sdate.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				try {
+					Calendar n = Calendar.getInstance();
+					int a = (n.get(Calendar.DATE));
+					int b =(n.get(Calendar.MONTH));
+					int c = (n.get(Calendar.YEAR));
+					
+					int b1 = b+1;
+					
+					
+					String str_a = String.valueOf(a);
+					String str_b = String.valueOf(b1);
+					String str_c = String.valueOf(c);
+					text_sdate.setText(str_a+":"+str_b+":"+str_c);
+					
+					
+				}
+				catch(Exception ei) {
+					ei.printStackTrace();
+				}
+				
+				
+			}
+		});
+		text_sdate.setForeground(Color.BLUE);
+		text_sdate.setFont(new Font("Tahoma", Font.BOLD, 18));
+		text_sdate.setColumns(10);
+		text_sdate.setBackground(Color.PINK);
+		text_sdate.setBounds(642, 149, 418, 34);
+		panel.add(text_sdate);
+		
+		JLabel lblSellsDate = new JLabel("Sells Date");
+		lblSellsDate.setForeground(new Color(218, 112, 214));
+		lblSellsDate.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblSellsDate.setBounds(511, 157, 121, 26);
+		panel.add(lblSellsDate);
+		
+		text_price = new JTextField();
+		text_price.setForeground(Color.BLUE);
+		text_price.setFont(new Font("Tahoma", Font.BOLD, 18));
+		text_price.setColumns(10);
+		text_price.setBackground(Color.PINK);
+		text_price.setBounds(1204, 153, 265, 34);
+		panel.add(text_price);
+		
+		JLabel lblSellsPrice = new JLabel("Sells Price");
+		lblSellsPrice.setForeground(new Color(218, 112, 214));
+		lblSellsPrice.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblSellsPrice.setBounds(1092, 157, 102, 26);
+		panel.add(lblSellsPrice);
+		
+		p_name = new JTextField();
+		p_name.setForeground(Color.BLUE);
+		p_name.setFont(new Font("Tahoma", Font.BOLD, 18));
+		p_name.setColumns(10);
+		p_name.setBackground(Color.PINK);
+		p_name.setBounds(148, 224, 236, 34);
+		panel.add(p_name);
+		
+		JLabel lblName = new JLabel("Customer Name");
+		lblName.setForeground(new Color(218, 112, 214));
+		lblName.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblName.setBounds(10, 228, 142, 26);
+		panel.add(lblName);
+		
+		JLabel t_amt = new JLabel("Total amount of Stock ");
+		t_amt.setForeground(new Color(220, 20, 60));
+		t_amt.setFont(new Font("Tahoma", Font.BOLD, 17));
+		t_amt.setBounds(430, 216, 208, 26);
+		panel.add(t_amt);
+		
+		st = new JTextField();
+		st.addMouseListener(new MouseAdapter() {
+			
+			public void mouseEntered(MouseEvent e) {
+				String total_c_s;
+				try {
+					pst = con.prepareStatement("select sum(total_cost)from store_record");
+					ResultSet rs = pst.executeQuery();
+					if(rs.next()==true) {
+						total_c_s = rs.getString("sum(total_cost)");
+						st.setText(total_c_s);
+						
+					}
+				}
+				catch(Exception ea) {
+					ea.printStackTrace();
+				}
+			
+				
+			}
+		});
+		st.setForeground(Color.BLUE);
+		st.setFont(new Font("Tahoma", Font.BOLD, 18));
+		st.setColumns(10);
+		st.setBackground(Color.WHITE);
+		st.setBounds(642, 212, 374, 34);
+		panel.add(st);
+		
+		JButton btnCheckSellsRecord = new JButton("Check Sells record");
+		btnCheckSellsRecord.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					pst = con.prepareStatement("select * from sells_record");
+					rs = pst.executeQuery();
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+					
+				}
+				catch(Exception ei) {
+					ei.printStackTrace();
+				}
+				
+				
+				
+			}
+			
+		});
+		btnCheckSellsRecord.setForeground(new Color(128, 0, 128));
+		btnCheckSellsRecord.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnCheckSellsRecord.setBackground(new Color(255, 140, 0));
+		btnCheckSellsRecord.setBounds(17, 346, 221, 41);
+		panel.add(btnCheckSellsRecord);
+		
+		JButton btnBack = new JButton("Back\r\n");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					pst = con.prepareStatement("select * from store_record");
+					rs = pst.executeQuery();
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				}
+				catch(SQLException eii) {
+					eii.printStackTrace();
+				}
+			}
+		});
+		btnBack.setForeground(new Color(128, 0, 128));
+		btnBack.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnBack.setBackground(new Color(255, 140, 0));
+		btnBack.setBounds(248, 347, 89, 38);
+		panel.add(btnBack);
+		
+		t_s_amu = new JTextField();
+		t_s_amu.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				String sum_total_sells;
+				try {
+					
+					pst = con.prepareStatement("select sum(profit) from sells_record group by Date = '12-04-2024'");
+					ResultSet rs = pst.executeQuery();
+					if(rs.next()==true) {
+						sum_total_sells = rs.getString("sum(profit)");
+						t_s_amu.setText(sum_total_sells);
+						
+					}
+					
+				}
+				catch(Exception ei) {
+					ei.printStackTrace();
+				}
+				
+				
+			}
+		});
+		t_s_amu.setForeground(Color.BLUE);
+		t_s_amu.setFont(new Font("Tahoma", Font.BOLD, 18));
+		t_s_amu.setColumns(10);
+		t_s_amu.setBackground(new Color(245, 245, 220));
+		t_s_amu.setBounds(1204, 212, 265, 34);
+		panel.add(t_s_amu);
+		
+		JLabel lblTotalSellsAmount = new JLabel("Profit");
+		lblTotalSellsAmount.setForeground(new Color(218, 112, 214));
+		lblTotalSellsAmount.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblTotalSellsAmount.setBounds(1150, 216, 50, 26);
+		panel.add(lblTotalSellsAmount);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 460, 1819, 539);
+		frame.getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		JTableHeader Theader = table.getTableHeader();
+		
+		Theader.setBackground(Color.red);
+		Theader.setForeground(Color.white);
+		
+		Theader.setFont(new Font("Tahome",Font.BOLD,15));
+		
+		((DefaultTableCellRenderer)Theader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+		table.setFont(new Font("Tahome",Font.BOLD,18));
+		
+		table_2 = new JTable();
+		table_2.setBounds(1742, 295, 1, 1);
+		frame.getContentPane().add(table_2);
+		
+		
+		
+		
+		
+	}
+
+
+}

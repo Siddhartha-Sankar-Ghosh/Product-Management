@@ -1,0 +1,65 @@
+package src.shree_hari_hardware2;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+public class Record {
+
+
+
+	JFrame frame;
+	private JTextField textdate;
+	private JTextField textaddress;
+	private JTextField textproducts;
+	private JTextField textac;
+	private JTextField textquantity;
+	private JTextField textsq;
+	private JTextField textcost;
+	private JTextField textsearch;
+	private JTable table;
+
+	private JFrame frame1s;
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Record window = new Record();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Record() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+}

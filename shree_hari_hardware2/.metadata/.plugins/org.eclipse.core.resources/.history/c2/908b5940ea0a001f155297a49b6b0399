@@ -1,0 +1,245 @@
+package src.shree_hari_hardware2;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+
+import net.proteanit.sql.DbUtils;
+
+public class Record {
+
+
+
+	JFrame frame;
+	private JTextField textdate;
+	private JTextField textaddress;
+	private JTextField textproducts;
+	private JTextField textac;
+	private JTextField textquantity;
+	private JTextField textsq;
+	private JTextField textcost;
+	private JTextField textsearch;
+	private JTable table;
+
+	private JFrame frame1s;
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Record window = new Record();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Record() {
+		initialize();
+		Connect();
+		table_load1();
+		table_load();
+	}
+	
+	private JTextField text_sdate;
+	private JTextField text_price;
+	private JTable table_1;
+	private JTextField p_name;
+	private JTable table_2;
+	private JTextField st;
+	private JTextField t_s_amu;
+	
+	
+	Connection con;
+	PreparedStatement pst;
+	ResultSet rs;
+	
+	public  void  Connect() {
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shree","root","Sidu@1234");
+			
+			if(!con.isClosed()) {
+				System.out.println("Successfully connected in the mysql server...");
+			}
+		}
+		catch(ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+	}
+	
+	public void table_load() {
+		try {
+			pst = con.prepareStatement("select * from store_record");
+			rs = pst.executeQuery();
+			table.setModel(DbUtils.resultSetToTableModel(rs));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void table_load1() {
+		try {
+			pst = con.prepareStatement("select * from sells_record");
+			rs = pst.executeQuery();
+			
+		}
+		catch(Exception ei) {
+			ei.printStackTrace();
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 8));
+		frame.getContentPane().setBackground(Color.CYAN);
+		frame.setBounds(100, 100, 1845, 1049);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		
+		
+		JLabel lblNewLabel = new JLabel("Wealcome to  Shree Hari Hardware");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel.setBounds(544, 11, 259, 25);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 224));
+		panel.setBorder(new TitledBorder(null, "Record", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(10, 35, 1503, 398);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("Date");
+		lblNewLabel_1.setForeground(new Color(255, 0, 255));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNewLabel_1.setBounds(53, 32, 56, 26);
+		panel.add(lblNewLabel_1);
+		
+		
+
+		textdate = new JTextField();
+		textdate.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				
+				
+				try {
+					Calendar n = Calendar.getInstance();
+					int a = (n.get(Calendar.DATE));
+					int b =(n.get(Calendar.MONTH));
+					int c = (n.get(Calendar.YEAR));
+					
+					int b1 = b+1;
+					
+					
+					String str_a = String.valueOf(a);
+					String str_b = String.valueOf(b1);
+					String str_c = String.valueOf(c);
+					textdate.setText(str_a+":"+str_b+":"+str_c);
+					
+					
+				}
+				catch(Exception ei) {
+					ei.printStackTrace();
+				}
+			}
+		});
+		textdate.setBackground(Color.GREEN);
+		textdate.setForeground(Color.BLUE);
+		textdate.setFont(new Font("Tahoma", Font.BOLD, 18));
+		textdate.setBounds(148, 29, 236, 34);
+		panel.add(textdate);
+		textdate.setColumns(10);
+		
+		JLabel txtadd = new JLabel("Address");
+		txtadd.setForeground(new Color(255, 0, 255));
+		txtadd.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtadd.setBounds(516, 33, 89, 24);
+		panel.add(txtadd);
+		
+		JLabel txtproducts = new JLabel("Products");
+		txtproducts.setForeground(new Color(255, 0, 255));
+		txtproducts.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtproducts.setBounds(1108, 32, 86, 26);
+		panel.add(txtproducts);
+		
+		JLabel txtap = new JLabel("Actual Price");
+		txtap.setForeground(new Color(255, 0, 255));
+		txtap.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtap.setBounds(491, 97, 114, 19);
+		panel.add(txtap);
+		
+		JLabel txtcost = new JLabel("Cost");
+		txtcost.setForeground(new Color(255, 0, 255));
+		txtcost.setFont(new Font("Tahoma", Font.BOLD, 17));
+		txtcost.setBounds(1138, 105, 56, 22);
+		panel.add(txtcost);
+		
+		
+		
+		
+		
+		
+	}
+
+}
